@@ -1,13 +1,20 @@
 import axios from 'axios'
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  'http://localhost:5001/wb-dev-480009/asia-northeast1'
-const LIST_PATH = import.meta.env.VITE_API_TODOS_LIST_PATH || '/list_todos'
-const GET_PATH = import.meta.env.VITE_API_TODOS_GET_PATH || '/get_todo'
-const CREATE_PATH = import.meta.env.VITE_API_TODOS_CREATE_PATH || '/create_todo'
-const UPDATE_PATH = import.meta.env.VITE_API_TODOS_UPDATE_PATH || '/update_todo'
-const DELETE_PATH = import.meta.env.VITE_API_TODOS_DELETE_PATH || '/delete_todo'
+const LIST_ENDPOINT =
+  import.meta.env.VITE_API_TODOS_LIST_ENDPOINT ||
+  'http://localhost:5001/wb-dev-480009/asia-northeast1/list_todos'
+const GET_ENDPOINT =
+  import.meta.env.VITE_API_TODOS_GET_ENDPOINT ||
+  'http://localhost:5001/wb-dev-480009/asia-northeast1/get_todo'
+const CREATE_ENDPOINT =
+  import.meta.env.VITE_API_TODOS_CREATE_ENDPOINT ||
+  'http://localhost:5001/wb-dev-480009/asia-northeast1/create_todo'
+const UPDATE_ENDPOINT =
+  import.meta.env.VITE_API_TODOS_UPDATE_ENDPOINT ||
+  'http://localhost:5001/wb-dev-480009/asia-northeast1/update_todo'
+const DELETE_ENDPOINT =
+  import.meta.env.VITE_API_TODOS_DELETE_ENDPOINT ||
+  'http://localhost:5001/wb-dev-480009/asia-northeast1/delete_todo'
 
 export interface Todo {
   id: string
@@ -31,25 +38,25 @@ export interface TodoUpdate {
 }
 
 export const getTodos = async (): Promise<Todo[]> => {
-  const response = await axios.get<Todo[]>(`${API_BASE_URL}${LIST_PATH}`)
+  const response = await axios.get<Todo[]>(LIST_ENDPOINT)
   return response.data
 }
 
 export const getTodo = async (id: string): Promise<Todo> => {
-  const response = await axios.get<Todo>(`${API_BASE_URL}${GET_PATH}/${id}`)
+  const response = await axios.get<Todo>(`${GET_ENDPOINT}/${id}`)
   return response.data
 }
 
 export const createTodo = async (todo: TodoCreate): Promise<Todo> => {
-  const response = await axios.post<Todo>(`${API_BASE_URL}${CREATE_PATH}`, todo)
+  const response = await axios.post<Todo>(CREATE_ENDPOINT, todo)
   return response.data
 }
 
 export const updateTodo = async (id: string, todo: TodoUpdate): Promise<Todo> => {
-  const response = await axios.patch<Todo>(`${API_BASE_URL}${UPDATE_PATH}/${id}`, todo)
+  const response = await axios.patch<Todo>(`${UPDATE_ENDPOINT}/${id}`, todo)
   return response.data
 }
 
 export const deleteTodo = async (id: string): Promise<void> => {
-  await axios.delete(`${API_BASE_URL}${DELETE_PATH}/${id}`)
+  await axios.delete(`${DELETE_ENDPOINT}/${id}`)
 }
