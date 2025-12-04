@@ -1,5 +1,4 @@
 """SQLModel models"""
-from app.models.base import BaseModel
+from models.base import BaseModel
 
 __all__ = ["BaseModel"]
-

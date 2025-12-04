@@ -14,14 +14,36 @@ pnpm install
 
 ### 環境変数の設定
 
-`.env.local` ファイルを作成（オプション）:
+Cloud Functionsに合わせて環境ごとの`.env`を用意しています（値は編集可）。
+
+- `.env.local` : ローカルFunctions Emulator（`http://localhost:5001/wb-dev-480009/asia-northeast1`）
+- `.env.dev`   : 開発環境Functions（`https://asia-northeast1-wb-dev-480009.cloudfunctions.net`）
+- `.env.prod`  : 本番環境Functions（`https://asia-northeast1-wb-prod.cloudfunctions.net` を想定。実際のプロジェクトIDに合わせて変更してください）
+
+各ファイルのデフォルト値（例）:
 
 ```env
-VITE_API_BASE_URL=http://localhost:8000
-VITE_API_V1_PREFIX=/api/v1
+VITE_API_BASE_URL=http://localhost:5001/wb-dev-480009/asia-northeast1
+VITE_API_HEALTH_PATH=/healthz_endpoint
+VITE_API_TODOS_LIST_PATH=/list_todos
+VITE_API_TODOS_GET_PATH=/get_todo
+VITE_API_TODOS_CREATE_PATH=/create_todo
+VITE_API_TODOS_UPDATE_PATH=/update_todo
+VITE_API_TODOS_DELETE_PATH=/delete_todo
 ```
 
-デフォルトでは `http://localhost:8000` に接続します。
+`--mode`オプションで読み込む`.env`を切り替えられます。
+
+```bash
+# ローカル（Functions Emulator）
+npm run dev -- --mode local
+
+# 開発環境（wb-dev-480009）
+npm run dev -- --mode dev
+
+# 本番環境（プロジェクトIDに合わせて.env.prodを更新）
+npm run build -- --mode prod
+```
 
 ### 開発サーバーの起動
 
@@ -85,4 +107,3 @@ frontend/
 ## Firebase Hosting
 
 Firebase Hostingへのデプロイは後続タスクで実装予定。
-
