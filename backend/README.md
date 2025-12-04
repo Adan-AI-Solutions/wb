@@ -1,89 +1,95 @@
-# WB Backend
+# WB Backend (Cloud Functions)
 
-FastAPI + SQLModel + PostgreSQL 15 のバックエンドアプリケーション
+Firebase Cloud Functions for Python を使用したバックエンドアプリケーション
+
+## 構造
+
+```
+backend/
+├── functions/           # Cloud Functionsのコード
+│   ├── main.py         # エントリポイント
+│   ├── api/            # APIエンドポイント
+│   ├── models/         # SQLModelモデル
+│   ├── db/             # データベースセッション管理
+│   ├── core/           # 設定・共通定数
+│   ├── migrations/     # Alembicマイグレーション
+│   └── requirements.txt
+├── firebase.json        # Firebase設定
+└── README.md
+```
 
 ## セットアップ
 
 ### ローカル開発環境
 
-1. 仮想環境の作成と有効化
+1. Firebase CLIのインストール（未インストールの場合）
 ```bash
-python3.11 -m venv .venv
-source .venv/bin/activate  # macOS/Linux
-# または
-.venv\Scripts\activate  # Windows
+npm install -g firebase-tools
 ```
 
-2. 依存関係のインストール
+2. Firebaseプロジェクトの初期化（初回のみ）
 ```bash
+cd backend
+firebase login
+firebase init functions
+# または既存の設定を使用する場合は、.firebasercが既に作成されています
+```
+
+3. Firebase Emulatorのセットアップ（Functionsのみ）
+```bash
+cd backend
+firebase init emulators
+# Functions Emulatorのみを選択
+```
+
+2. Python仮想環境の作成
+```bash
+cd functions
+python3.11 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
 3. 環境変数の設定
 ```bash
 cp .env.example .env.local
-# .env.local を編集して必要に応じて設定を変更
+# .env.local を編集してDB接続情報を設定
 ```
 
-4. データベースマイグレーション
+4. Firebase Emulatorの起動
 ```bash
-# 初回のみ: Alembicの初期化（既に作成済みの場合は不要）
-# alembic init migrations
-
-# マイグレーションの作成
-alembic revision --autogenerate -m "Initial migration"
-
-# マイグレーションの適用
-alembic upgrade head
+firebase emulators:start
 ```
 
-5. アプリケーションの起動
-```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
+## デプロイ
 
-### Docker Compose を使用した開発
-
-プロジェクトルートから以下を実行:
+### Firebase Functionsへのデプロイ
 
 ```bash
-docker compose up -d
-docker compose run backend alembic upgrade head
+cd backend
+firebase deploy --only functions
 ```
 
-## ディレクトリ構造
+### 環境変数の設定
 
+Firebase ConsoleまたはCLIで環境変数を設定：
+
+```bash
+firebase functions:config:set database.url="postgresql+psycopg2://..."
 ```
-backend/
-├── app/
-│   ├── api/          # APIルーティング
-│   ├── models/       # SQLModelモデル
-│   ├── db/           # データベースセッション管理
-│   ├── core/         # 設定・共通定数
-│   ├── auth/         # 認証関連（Firebase Authは後で実装）
-│   └── main.py       # FastAPIエントリポイント
-├── migrations/       # Alembicマイグレーション
-├── requirements.txt  # Python依存関係
-├── Dockerfile        # Cloud Run用Dockerfile
-└── alembic.ini       # Alembic設定
-```
-
-## API エンドポイント
-
-- `GET /` - ルートエンドポイント
-- `GET /healthz` - ヘルスチェック
 
 ## 技術スタック
 
-- **Framework**: FastAPI
+- **Runtime**: Python 3.11 (Cloud Functions)
+- **Framework**: Firebase Functions for Python
 - **ORM**: SQLModel (SQLAlchemy)
 - **Migration**: Alembic
-- **Database**: PostgreSQL 15
-- **Python**: 3.11
+- **Database**: Cloud SQL for PostgreSQL 15
 
 ## 注意事項
 
-- データベースタイムゾーン: UTC
-- 主キー: UUID
-- 手動SQLは原則禁止（SQLModel/SQLAlchemyを使用）
+- Cloud SQL接続にはPrivate IPを使用
+- 環境変数はFirebase Functionsの設定から読み込む
+- ローカル開発時はFirebase Emulatorを使用（Functionsのみ）
+- Firestoreは使用しません（RDBのみ）
 

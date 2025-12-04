@@ -17,28 +17,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Backend FastAPI application
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.dev
-    container_name: wb-backend
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-    volumes:
-      - ./backend:/app
-      - /app/.venv  # 仮想環境をマウントしない
-    ports:
-      - "8000:8000"
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      - DATABASE_URL=postgresql+psycopg2://wb_dev_user:wb_dev_password@db:5432/wb_dev
-      - API_V1_PREFIX=/api/v1
-      - APP_NAME=WB Backend
-      - APP_VERSION=0.1.0
-      - DEBUG=true
-
 volumes:
   postgres_data:
 
