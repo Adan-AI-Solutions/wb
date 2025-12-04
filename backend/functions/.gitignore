@@ -10,9 +10,10 @@ env/
 *.egg-info/
 .pytest_cache/
 .mypy_cache/
-.env
-.env.local
+# .envファイルはGit管理する
+# *.local は除外するが、.env.localは管理する
 *.local
+!.env.local
 firebase-debug.log
 firebase-debug.*.log
 

@@ -17,37 +17,37 @@ except ValueError:
 from api import healthz, todos
 
 
-@https_fn.on_request(region="asia-northeast1", cors=True)
+@https_fn.on_request(region="asia-northeast1")
 def healthz_endpoint(req: https_fn.Request) -> https_fn.Response:
     """ヘルスチェックエンドポイント"""
     return healthz.handle_healthz(req)
 
 
-@https_fn.on_request(region="asia-northeast1", cors=True)
+@https_fn.on_request(region="asia-northeast1")
 def list_todos(req: https_fn.Request) -> https_fn.Response:
     """Todo一覧取得エンドポイント"""
     return todos.list_todos(req)
 
 
-@https_fn.on_request(region="asia-northeast1", cors=True)
+@https_fn.on_request(region="asia-northeast1")
 def get_todo(req: https_fn.Request) -> https_fn.Response:
     """Todo取得エンドポイント"""
     return todos.get_todo(req)
 
 
-@https_fn.on_request(region="asia-northeast1", cors=True)
+@https_fn.on_request(region="asia-northeast1")
 def create_todo(req: https_fn.Request) -> https_fn.Response:
     """Todo作成エンドポイント"""
     return todos.create_todo(req)
 
 
-@https_fn.on_request(region="asia-northeast1", cors=True)
+@https_fn.on_request(region="asia-northeast1")
 def update_todo(req: https_fn.Request) -> https_fn.Response:
     """Todo更新エンドポイント"""
     return todos.update_todo(req)
 
 
-@https_fn.on_request(region="asia-northeast1", cors=True)
+@https_fn.on_request(region="asia-northeast1")
 def delete_todo(req: https_fn.Request) -> https_fn.Response:
     """Todo削除エンドポイント"""
     return todos.delete_todo(req)

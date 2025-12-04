@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     GCP_PROJECT: Optional[str] = os.getenv("GCP_PROJECT") or os.getenv("GCLOUD_PROJECT")
     
     class Config:
-        env_file = ".env.local"
+        env_file = [".env.local", ".env"]
         case_sensitive = True
 
 
