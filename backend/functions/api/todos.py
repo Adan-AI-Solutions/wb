@@ -49,7 +49,7 @@ def list_todos(req: https_fn.Request) -> https_fn.Response:
                 completed=todo.completed,
                 created_at=todo.created_at.isoformat(),
                 updated_at=todo.updated_at.isoformat() if todo.updated_at else None
-            ).model_dump()
+            )
             for todo in todos
         ]
         return cors_response(result)

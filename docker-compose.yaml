@@ -17,29 +17,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Backend Cloud Functions development environment
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: wb-backend
-    volumes:
-      - ./backend:/backend
-      - backend_venv:/backend/functions/venv
-    ports:
-      - "5001:5001"  # Firebase Functions Emulator
-      - "4000:4000"  # Firebase Emulator UI
-      - "4500:4500"  # Firebase Emulator Logs
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      - DATABASE_URL=postgresql+psycopg2://wb_dev_user:wb_dev_password@db:5432/wb_dev
-      - DEBUG=true
-    stdin_open: true
-    tty: true
-
 volumes:
   postgres_data:
-  backend_venv:
 

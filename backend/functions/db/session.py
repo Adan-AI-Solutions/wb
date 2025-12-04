@@ -1,26 +1,15 @@
 """Cloud Functions用データベースセッション管理"""
-import os
 from datetime import datetime
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session as SQLAlchemySession
 from sqlmodel import SQLModel, Session
+from core.config import settings
 from models.base import BaseModel
-
-# 環境変数から直接DATABASE_URLを取得（エミュレーター環境対応）
-# 優先順位: 環境変数 > デフォルト値（ローカル開発環境用）
-database_url = os.getenv("DATABASE_URL", "")
-
-# DATABASE_URLが空の場合はデフォルト値を使用（ローカル開発環境）
-if not database_url:
-    database_url = "postgresql+psycopg2://wb_dev_user:wb_dev_password@db:5432/wb_dev"
-
-# DEBUG設定（環境変数から取得、デフォルトはFalse）
-debug_mode = os.getenv("DEBUG", "false").lower() == "true"
 
 # SQLAlchemyエンジン作成（Cloud SQL接続用）
 engine = create_engine(
-    database_url,
-    echo=debug_mode,
+    settings.DATABASE_URL,
+    echo=settings.DEBUG,
     pool_pre_ping=True,
     pool_size=5,
     max_overflow=10,
