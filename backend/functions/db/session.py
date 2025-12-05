@@ -1,18 +1,22 @@
-"""データベースセッション管理"""
+"""Cloud Functions用データベースセッション管理"""
 from datetime import datetime
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session as SQLAlchemySession
 from sqlmodel import SQLModel, Session
-from app.core.config import settings
-from app.models.base import BaseModel
+from core.config import settings
+from models.base import BaseModel
 
-# SQLAlchemyエンジン作成
+# SQLAlchemyエンジン作成（Cloud SQL接続用）
 engine = create_engine(
     settings.DATABASE_URL,
     echo=settings.DEBUG,
     pool_pre_ping=True,
     pool_size=5,
     max_overflow=10,
+    # Cloud SQL接続のための設定
+    connect_args={
+        "connect_timeout": 10,
+    }
 )
 
 
@@ -24,8 +28,7 @@ def receive_before_update(mapper, connection, target):
 
 
 def get_db():
-    """データベースセッションを取得する依存性注入用関数"""
-    # SQLModelのSessionを使う
+    """データベースセッションを取得する関数（Cloud Functions用）"""
     with Session(engine) as session:
         yield session
 
@@ -33,3 +36,4 @@ def get_db():
 def init_db():
     """データベーステーブルを初期化"""
     SQLModel.metadata.create_all(engine)
+

@@ -1,7 +1,7 @@
 """Todoモデル（サンプル）"""
 from typing import Optional
 from sqlmodel import Field, SQLModel
-from app.models.base import BaseModel
+from models.base import BaseModel
 
 
 class TodoBase(SQLModel):
@@ -33,4 +33,3 @@ class TodoRead(TodoBase):
     id: str
     created_at: str
     updated_at: Optional[str] = None
-

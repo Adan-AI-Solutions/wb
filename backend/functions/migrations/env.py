@@ -1,4 +1,4 @@
-"""Alembic環境設定"""
+"""Alembic環境設定（Cloud Functions用）"""
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
@@ -10,10 +10,10 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # SQLModelのメタデータをインポート
-from app.db.session import engine
-from app.models.base import BaseModel
-from app.models.todo import Todo  # モデルをインポートしてメタデータに登録
-from app.core.config import settings
+from db.session import engine
+from models.base import BaseModel
+from models.todo import Todo  # モデルをインポートしてメタデータに登録
+from core.config import settings
 
 # Alembic Config object
 config = context.config
@@ -64,4 +64,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-

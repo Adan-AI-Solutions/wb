@@ -1,6 +1,4 @@
-import axios from 'axios'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+import { callCloudFunction } from '@/plugins/firebase'
 
 export interface HealthResponse {
   status: string
@@ -9,7 +7,5 @@ export interface HealthResponse {
 }
 
 export const checkBackendHealth = async (): Promise<HealthResponse> => {
-  const response = await axios.get<HealthResponse>(`${API_BASE_URL}/healthz`)
-  return response.data
+  return await callCloudFunction<HealthResponse>('healthz_endpoint')
 }
-

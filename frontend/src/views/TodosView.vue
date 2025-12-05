@@ -8,6 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import { getTodos, createTodo, updateTodo, deleteTodo } from '@/api/todos'
+import { getTodos } from '@/api/getTodos'
+import { createTodo } from '@/api/createTodo'
+import { updateTodo } from '@/api/updateTodo'
+import { deleteTodo } from '@/api/deleteTodo'
 import TodoSection from '@/components/todo/TodoSection.vue'
 </script>
