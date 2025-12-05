@@ -5,7 +5,7 @@
 ## プロジェクト構成
 
 - **Frontend**: Vue.js + Firebase Hosting
-- **Backend**: FastAPI + SQLModel + Cloud Run
+- **Backend**: Cloud Functions
 - **Database**: Cloud SQL for PostgreSQL 15
 - **Infrastructure**: GCP (dev/prod プロジェクト分離)
 
