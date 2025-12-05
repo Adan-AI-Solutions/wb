@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import TodoItem from './TodoItem.vue'
-import type { Todo } from '@/api/todos'
+import type { Todo } from '@/api/todoTypes'
 
 interface Props {
   todos: Todo[]
@@ -43,4 +43,3 @@ defineEmits<{
   delete: [id: string]
 }>()
 </script>
-

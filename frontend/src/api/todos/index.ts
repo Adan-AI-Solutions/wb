@@ -1,6 +1,0 @@
-export type { Todo, TodoCreate, TodoUpdate } from './types'
-export { getTodos } from './getTodos'
-export { getTodo } from './getTodo'
-export { createTodo } from './createTodo'
-export { updateTodo } from './updateTodo'
-export { deleteTodo } from './deleteTodo'

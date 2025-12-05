@@ -29,7 +29,7 @@ import { ref, watch, computed } from 'vue'
 import AInput from '../common/AInput.vue'
 import ATextarea from '../common/ATextarea.vue'
 import AButton from '../common/AButton.vue'
-import type { TodoCreate } from '@/api/todos'
+import type { TodoCreate } from '@/api/todoTypes'
 
 interface Props {
   loading?: boolean
@@ -65,4 +65,3 @@ watch(() => props.loading, (newVal) => {
   }
 })
 </script>
-

@@ -24,7 +24,7 @@
 import { ref, onMounted } from 'vue'
 import TodoForm from './TodoForm.vue'
 import TodoList from './TodoList.vue'
-import type { Todo, TodoCreate } from '@/api/todos'
+import type { Todo, TodoCreate } from '@/api/todoTypes'
 
 interface Props {
   getTodos: () => Promise<Todo[]>
@@ -107,4 +107,3 @@ onMounted(() => {
   fetchTodos()
 })
 </script>
-

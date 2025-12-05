@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { Todo, TodoUpdate } from './types'
+import type { Todo, TodoUpdate } from './todoTypes'
 
 const UPDATE_TODO_ENDPOINT =
   import.meta.env.VITE_API_TODOS_UPDATE_ENDPOINT ||

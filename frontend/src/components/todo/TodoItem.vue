@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import AButton from '../common/AButton.vue'
-import type { Todo } from '@/api/todos'
+import type { Todo } from '@/api/todoTypes'
 
 interface Props {
   todo: Todo
@@ -61,4 +61,3 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleString('ja-JP')
 }
 </script>
-

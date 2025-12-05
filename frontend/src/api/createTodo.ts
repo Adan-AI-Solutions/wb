@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { Todo, TodoCreate } from './types'
+import type { Todo, TodoCreate } from './todoTypes'
 
 const CREATE_TODO_ENDPOINT =
   import.meta.env.VITE_API_TODOS_CREATE_ENDPOINT ||
