@@ -14,34 +14,23 @@ pnpm install
 
 ### 環境変数の設定
 
-Cloud Functionsは関数名ごとのエンドポイントを直接叩くため、環境ごとにフルURLを持つ`.env`を用意しています（値は編集可）。
+Cloud Functionsは関数名ごとのエンドポイントを直接叩くため、環境ごとにフルURLを持つ`.env`を用意しています（値は編集可）。Viteのmodeと名前を合わせたファイル名に統一しています。
 
-- `.env.local` : ローカル Functions Emulator 用（例: `http://localhost:5001/wb-dev-480009/asia-northeast1/*`）
-- `.env.dev`   : 開発環境 Functions 用
-- `.env.prod`  : 本番環境 Functions 用（プロジェクトIDに合わせて変更してください）
+- `.env.local`        : ローカル Functions Emulator 用（例: `http://localhost:5001/wb-dev-480009/asia-northeast1/*`）
+- `.env.development`  : 開発環境 Functions 用（`npm run dev` デフォルトで読み込み）
+- `.env.production`   : 本番環境 Functions 用（プロジェクトIDに合わせて変更してください）
 
-各ファイルのデフォルト値（例）:
-
-```env
-VITE_API_HEALTH_ENDPOINT=http://localhost:5001/wb-dev-480009/asia-northeast1/healthz_endpoint
-VITE_API_TODOS_LIST_ENDPOINT=http://localhost:5001/wb-dev-480009/asia-northeast1/list_todos
-VITE_API_TODOS_GET_ENDPOINT=http://localhost:5001/wb-dev-480009/asia-northeast1/get_todo
-VITE_API_TODOS_CREATE_ENDPOINT=http://localhost:5001/wb-dev-480009/asia-northeast1/create_todo
-VITE_API_TODOS_UPDATE_ENDPOINT=http://localhost:5001/wb-dev-480009/asia-northeast1/update_todo
-VITE_API_TODOS_DELETE_ENDPOINT=http://localhost:5001/wb-dev-480009/asia-northeast1/delete_todo
-```
-
-`--mode`オプションで読み込む`.env`を切り替えられます。
+`--mode`オプションで読み込む`.env`を切り替えられます（指定がなければ`development`として`.env.development`を読む）。
 
 ```bash
 # ローカル（Functions Emulator）
 npm run dev -- --mode local
 
 # 開発環境（wb-dev-480009）
-npm run dev -- --mode dev
+npm run dev
 
-# 本番環境（プロジェクトIDに合わせて.env.prodを更新）
-npm run build -- --mode prod
+# 本番環境（プロジェクトIDに合わせて.env.productionを更新）
+npm run build
 ```
 
 ### 開発サーバーの起動
