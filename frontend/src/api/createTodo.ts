@@ -1,11 +1,6 @@
-import axios from 'axios'
+import { callCloudFunction } from '@/plugins/firebase'
 import type { Todo, TodoCreate } from './todoTypes'
 
-const CREATE_TODO_ENDPOINT =
-  import.meta.env.VITE_API_TODOS_CREATE_ENDPOINT ||
-  'http://localhost:5001/wb-dev-480009/asia-northeast1/create_todo'
-
 export const createTodo = async (todo: TodoCreate): Promise<Todo> => {
-  const response = await axios.post<Todo>(CREATE_TODO_ENDPOINT, todo)
-  return response.data
+  return await callCloudFunction<Todo>('create_todo', todo)
 }

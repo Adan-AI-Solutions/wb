@@ -31,8 +31,9 @@ def list_todos(req: https_fn.Request) -> https_fn.Response:
     if req.method != 'GET':
         return cors_response({"error": "Method not allowed"}, 405)
     
-    skip = int(req.args.get('skip', 0))
-    limit = int(req.args.get('limit', 100))
+    data = request.get_json(silent=True) or {}
+    skip = int(req.args.get('skip', data.get('skip', 0)))
+    limit = int(req.args.get('limit', data.get('limit', 100)))
     
     db_gen = get_db()
     db = next(db_gen)
@@ -65,9 +66,9 @@ def get_todo(req: https_fn.Request) -> https_fn.Response:
     if req.method != 'GET':
         return cors_response({"error": "Method not allowed"}, 405)
     
-    # パスからIDを抽出（/api/v1/todos/{id}）
+    data = request.get_json(silent=True) or {}
     path_parts = req.path.strip('/').split('/')
-    todo_id = path_parts[-1] if path_parts else None
+    todo_id = data.get('id') or (path_parts[-1] if path_parts else None)
     
     if not todo_id:
         return cors_response({"error": "Todo ID is required"}, 400)
@@ -145,9 +146,9 @@ def update_todo(req: https_fn.Request) -> https_fn.Response:
     if req.method != 'PATCH':
         return cors_response({"error": "Method not allowed"}, 405)
     
-    # パスからIDを抽出（/api/v1/todos/{id}）
+    data = request.get_json(silent=True) or {}
     path_parts = req.path.strip('/').split('/')
-    todo_id = path_parts[-1] if path_parts else None
+    todo_id = data.get('id') or (path_parts[-1] if path_parts else None)
     
     if not todo_id:
         return cors_response({"error": "Todo ID is required"}, 400)
@@ -156,10 +157,6 @@ def update_todo(req: https_fn.Request) -> https_fn.Response:
         todo_uuid = UUID(todo_id)
     except ValueError:
         return cors_response({"error": "Invalid todo ID"}, 400)
-    
-    data = request.get_json()
-    if not data:
-        return cors_response({"error": "Request body is required"}, 400)
     
     try:
         todo_update = TodoUpdate(**data)
@@ -203,9 +200,9 @@ def delete_todo(req: https_fn.Request) -> https_fn.Response:
     if req.method != 'DELETE':
         return cors_response({"error": "Method not allowed"}, 405)
     
-    # パスからIDを抽出（/api/v1/todos/{id}）
+    data = request.get_json(silent=True) or {}
     path_parts = req.path.strip('/').split('/')
-    todo_id = path_parts[-1] if path_parts else None
+    todo_id = data.get('id') or (path_parts[-1] if path_parts else None)
     
     if not todo_id:
         return cors_response({"error": "Todo ID is required"}, 400)
