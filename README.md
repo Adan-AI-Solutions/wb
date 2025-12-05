@@ -13,28 +13,32 @@
 
 ```
 wb/
-├── frontend/              # Vue.js フロントエンド
+├── frontend/                # Vue.js フロントエンド
+│   ├── src/                # components, views, stores, router, api など
+│   ├── public/
+│   ├── package.json
 │   ├── README.md
-│   └── .gitignore
-├── backend/               # FastAPI バックエンド
-│   ├── app/               # アプリケーションコード
-│   │   ├── api/           # APIルーティング
-│   │   ├── models/        # SQLModelモデル
-│   │   ├── db/            # データベースセッション
-│   │   ├── core/          # 設定・共通定数
-│   │   ├── auth/          # 認証関連
-│   │   └── main.py        # FastAPIエントリポイント
-│   ├── migrations/        # Alembicマイグレーション
-│   ├── requirements.txt   # Python依存関係
-│   ├── Dockerfile         # Cloud Run用Dockerfile
-│   ├── alembic.ini        # Alembic設定
-│   └── README.md
-├── infrastructure/         # GCPインフラ構築スクリプト
-│   ├── setup-dev.sh       # dev環境セットアップスクリプト
-│   ├── deploy-backend.sh  # バックエンドデプロイスクリプト
-│   ├── README.md          # インフラ構築手順
-│   └── PROD_SETUP.md      # prod環境セットアップメモ
-├── docker-compose.yaml     # ローカル開発環境
+│   ├── .env.local          # Functions Emulator 用
+│   ├── .env.development    # 開発環境 Functions 用
+│   └── .env.production     # 本番環境 Functions 用
+├── backend/                 # Firebase Functions (Python)
+│   ├── firebase.json        # Emulator/デプロイ設定
+│   └── functions/
+│       ├── main.py          # エントリポイント
+│       ├── api/
+│       ├── app/
+│       ├── core/
+│       ├── db/
+│       ├── models/
+│       ├── migrations/
+│       ├── alembic.ini
+│       └── requirements.txt
+├── infrastructure/           # GCPインフラ構築スクリプト
+│   ├── setup-dev.sh         # dev環境セットアップスクリプト
+│   ├── deploy-backend.sh    # バックエンドデプロイスクリプト
+│   ├── README.md            # インフラ構築手順
+│   └── PROD_SETUP.md        # prod環境セットアップメモ
+├── docker-compose.yaml       # ローカル開発用 PostgreSQL
 ├── .gitignore
 └── README.md
 ```
@@ -61,56 +65,39 @@ gcloud auth login
 gcloud config set project wb-dev-480009
 ```
 
-### ローカル開発
+### ローカル開発（Docker + Emulator + Frontend疎通）
 
-#### 1. バックエンドのセットアップ
+1. **DockerでDBを起動**
 
 ```bash
-cd backend
+# プロジェクトルートで
+docker compose up -d
+# 接続文字列: postgresql+psycopg2://wb_dev_user:wb_dev_password@localhost:5432/wb_dev
+```
+
+2. **Backend（Functions）エミュレーター起動**
+
+```bash
+cd backend/functions
 python3.11 -m venv .venv
 source .venv/bin/activate  # macOS/Linux
 # または .venv\Scripts\activate  # Windows
 pip install -r requirements.txt
+
+# DB接続を .env.local に設定（上記接続文字列）
+firebase emulators:start --only functions --project wb-dev-480009
 ```
 
-#### 2. 環境変数の設定
-
-```bash
-# .env.local ファイルを作成（docker-compose用）
-# DATABASE_URLはdocker-compose.yamlで自動設定されます
-```
-
-#### 3. Docker Composeで起動
-
-```bash
-# プロジェクトルートから
-docker compose up -d
-```
-
-#### 4. マイグレーション実行
-
-```bash
-# 初回のみ: マイグレーションファイル作成
-docker compose run backend alembic revision --autogenerate -m "Initial migration"
-
-# マイグレーション適用
-docker compose run backend alembic upgrade head
-```
-
-#### 5. 動作確認
-
-```bash
-# ヘルスチェック
-curl http://localhost:8000/healthz
-```
-
-#### 6. フロントエンドのセットアップ（後で実装）
+3. **Frontend疎通確認（エミュレーターを叩く）**
 
 ```bash
 cd frontend
 npm install  # or pnpm install
-npm run dev  # or pnpm dev
+npm run dev -- --mode local
+# http://localhost:3000 を開き、Functions Emulator経由でAPI疎通
 ```
+
+※ `.env.local` は Functions Emulator 用、`.env.development` は開発環境（実機Functions）用。`npm run dev` は `.env.development` を読み込みます。
 
 ## GCP プロジェクト
 
@@ -162,4 +149,3 @@ cd infrastructure
 6. ⏳ Frontendプロジェクト作成（Vue.js）
 7. ⏳ Firebase Hosting設定
 8. ⏳ Firebase Authentication設定
-

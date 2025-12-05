@@ -68,12 +68,6 @@ docker-compose.override.yml
 *.sublime-project
 *.sublime-workspace
 
-# Environment variables
-.env
-# .env.local をリポジトリで管理するため除外しない
-.env.*.local
-*.env
-
 # GCP
 .gcloudignore
 service-account-*.json
